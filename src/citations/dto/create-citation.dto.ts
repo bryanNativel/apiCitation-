@@ -1,4 +1,5 @@
-import {User} from "../../users/entities/user.entity";
+import {User} from "../../users/shamas/user.shema.";
+
 
 export class CreateCitationDto {
 

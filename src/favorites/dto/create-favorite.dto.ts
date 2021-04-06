@@ -1,5 +1,6 @@
-import {User} from "../../users/entities/user.entity";
-import {Citation} from "../../citations/entities/citation.entity";
+import {User} from "../../users/shamas/user.shema.";
+import {Citation} from "../../citations/shemas/citation.shema";
+
 
 export class CreateFavoriteDto {
 

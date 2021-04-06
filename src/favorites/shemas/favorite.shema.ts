@@ -1,7 +1,10 @@
-import mongoose, {Document} from "mongoose";
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import {User} from "../../users/entities/user.entity";
-import {Citation} from "../../citations/entities/citation.entity";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import * as mongoose from "mongoose";
+
+import {Citation} from "../../citations/shemas/citation.shema";
+import {User} from "../../users/shamas/user.shema.";
+
 
 export type FavoriteDocument = Favorite & Document;
 
@@ -11,6 +14,7 @@ export class Favorite {
     count :number;
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     user: User;
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Citation' })
     citation: Citation;
 

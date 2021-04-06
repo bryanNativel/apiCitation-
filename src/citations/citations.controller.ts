@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CitationsService } from './citations.service';
 import { CreateCitationDto } from './dto/create-citation.dto';
 import { UpdateCitationDto } from './dto/update-citation.dto';
+import {ObjectId} from "mongoose";
+import * as mongoose from "mongoose";
 
-@Controller('citations')
+@Controller('api/citations')
 export class CitationsController {
   constructor(private readonly citationsService: CitationsService) {}
 
@@ -17,18 +19,19 @@ export class CitationsController {
     return this.citationsService.findAll();
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string) {
-    return this.citationsService.findOne(+id);
-  }
 
-  @Patch(':id')
+   return this.citationsService.findOne(id);
+
+  }
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() updateCitationDto: UpdateCitationDto) {
-    return this.citationsService.update(+id, updateCitationDto);
+    return this.citationsService.update(id, updateCitationDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.citationsService.remove(+id);
+    return this.citationsService.remove(id);
   }
 }

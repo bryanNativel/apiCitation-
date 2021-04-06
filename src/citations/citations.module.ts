@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CitationsService } from './citations.service';
 import { CitationsController } from './citations.controller';
-import {Citation, CitationSchema} from "./entities/citation.entity";
+
 import { MongooseModule } from '@nestjs/mongoose';
+import {CitationSchema} from "./shemas/citation.shema";
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Citation', schema: CitationSchema }])],
