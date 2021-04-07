@@ -1,15 +1,17 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {CreateFavoriteDto} from './dto/create-favorite.dto';
 import {UpdateFavoriteDto} from './dto/update-favorite.dto';
-import {Model, QueryWithHelpers} from "mongoose";
-
+import {Model, QueryWithHelpers, Schema} from "mongoose";
+import * as mongoose from "mongoose";
 import {InjectModel} from '@nestjs/mongoose';
 import {Favorite, FavoriteDocument} from "./shemas/favorite.shema";
+import {CitationsService} from "../citations/citations.service";
+import {Citation, CitationDocument} from "../citations/shemas/citation.shema";
 
 @Injectable()
 export class FavoritesService {
     constructor(
-        @InjectModel(Favorite.name) private readonly favoriteModel: Model<FavoriteDocument>,
+        @InjectModel(Favorite.name) private readonly favoriteModel: Model<FavoriteDocument>, @InjectModel(Citation.name) private readonly citationModel: Model<CitationDocument>
     ) {
     }
 
@@ -25,20 +27,32 @@ export class FavoritesService {
         }
     }
 
-    async findAll(): Promise<Favorite[]> {
+    async findAll(userId: string) {
         try {
-            return await this.favoriteModel.find().exec();
-        } catch {
+            const favorites = await this.favoriteModel.find().exec()
+            const favoritesFilter = favorites.map(favorite => favorite['_doc'])
+            const quoteIds = favoritesFilter.map(favorite => favorite['_doc'].citation)
+
+            const quote = await this.citationModel.find({
+                '_id': {
+                    $in:
+                        quoteIds
+
+                }
+            })
+            return quote
+
+        } catch (e) {
             throw new HttpException({
                 status: HttpStatus.NOT_FOUND,
-                error: "empty",
+                error: e,
             }, HttpStatus.NOT_FOUND);
         }
     }
 
-    async findOne(id: string) {
+    async findOne(idFav: string, idUser: string) {
         try {
-            return await this.favoriteModel.findById(id);
+            return await this.favoriteModel.find({}).sort({user: idUser, _id: idFav});
         } catch (e) {
             throw new HttpException({
                 status: HttpStatus.BAD_REQUEST,
@@ -48,16 +62,6 @@ export class FavoritesService {
 
     }
 
-    async update(id: string, updateFavoriteDto: UpdateFavoriteDto) {
-        try {
-            return await this.favoriteModel.findByIdAndUpdate(id, updateFavoriteDto, {new: true});
-        } catch (e) {
-            throw new HttpException({
-                status: HttpStatus.BAD_REQUEST,
-                error: e,
-            }, HttpStatus.BAD_REQUEST);
-        }
-    }
 
     async remove(id: string) {
         try {

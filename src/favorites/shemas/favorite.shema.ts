@@ -11,11 +11,11 @@ export type FavoriteDocument = Favorite & Document;
 @Schema()
 export class Favorite {
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    user: User;
+    @Prop()
+    user: string;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Citation' })
-    citation: Citation;
+    @Prop()
+    citation: string;
 
 }
 export const FavoriteSchema = SchemaFactory.createForClass(Favorite);

@@ -12,14 +12,14 @@ export class FavoritesController {
     return this.favoritesService.create(createFavoriteDto);
   }
 
-  @Get()
-  findAll() {
-    return this.favoritesService.findAll();
+  @Get(':userId')
+  findAll(@Param('userId') userId: string) {
+    return this.favoritesService.findAll(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favoritesService.findOne(id);
+  @Get(':idFav/:idUser')
+  findOne(@Param('idFav') idFav: string,@Param('idUser') idUser: string) {
+    return this.favoritesService.findOne(idFav,idUser);
   }
 
   @Delete(':id')
