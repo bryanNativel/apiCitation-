@@ -17,9 +17,9 @@ export class FavoritesController {
     return this.favoritesService.findAll(userId);
   }
 
-  @Get(':idFav/:idUser')
-  findOne(@Param('idFav') idFav: string,@Param('idUser') idUser: string) {
-    return this.favoritesService.findOne(idFav,idUser);
+  @Get('/getOne/:quoteId')
+  findOne(@Param('quoteId') quoteId: string) {
+    return this.favoritesService.findOne(quoteId);
   }
 
   @Delete(':id')

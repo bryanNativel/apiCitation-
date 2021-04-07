@@ -30,14 +30,16 @@ export class FavoritesService {
     async findAll(userId: string) {
         try {
             const favorites = await this.favoriteModel.find().exec()
-            const favoritesFilter = favorites.map(favorite => favorite['_doc'])
-            const quoteIds = favoritesFilter.map(favorite => favorite['_doc'].citation)
-
+            let favoriteFilter = []
+            favorites.forEach(favorite=>{
+                if(favorite.user == userId){
+                    favoriteFilter.push(favorite.citation)
+                }
+            })
             const quote = await this.citationModel.find({
                 '_id': {
                     $in:
-                        quoteIds
-
+                    favoriteFilter
                 }
             })
             return quote
@@ -50,9 +52,18 @@ export class FavoritesService {
         }
     }
 
-    async findOne(idFav: string, idUser: string) {
+     async findOne(quoteId: string) {
         try {
-            return await this.favoriteModel.find({}).sort({user: idUser, _id: idFav});
+             const favorite =  await this.favoriteModel.findById({_id: quoteId});
+            const quote = await this.citationModel.find({
+                '_id': {
+                    $in:
+                    favorite.citation
+                }
+            })
+            return quote
+
+
         } catch (e) {
             throw new HttpException({
                 status: HttpStatus.BAD_REQUEST,
@@ -61,7 +72,6 @@ export class FavoritesService {
         }
 
     }
-
 
     async remove(id: string) {
         try {
