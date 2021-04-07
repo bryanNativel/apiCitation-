@@ -13,8 +13,17 @@ export class UsersService  {
   ) {}
   async create(createUserDto: CreateUserDto):Promise<User> {
     try{
-      const createdCat = new this.userModel(createUserDto);
-      return createdCat.save();
+      const user = await this.findOne(createUserDto.email)
+      if(!user){
+        const createdCat = new this.userModel(createUserDto);
+        return createdCat.save();
+      }else{
+        throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: "user existing",
+        }, HttpStatus.BAD_REQUEST);
+      }
+
     }catch(e){
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
