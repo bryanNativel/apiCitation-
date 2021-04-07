@@ -3,7 +3,7 @@ import { FavoritesService } from './favorites.service';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { UpdateFavoriteDto } from './dto/update-favorite.dto';
 
-@Controller('favorites')
+@Controller('api/favorites')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
@@ -19,16 +19,11 @@ export class FavoritesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.favoritesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFavoriteDto: UpdateFavoriteDto) {
-    return this.favoritesService.update(+id, updateFavoriteDto);
+    return this.favoritesService.findOne(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.favoritesService.remove(+id);
+    return this.favoritesService.remove(id);
   }
 }

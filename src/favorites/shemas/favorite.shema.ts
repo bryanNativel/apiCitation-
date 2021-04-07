@@ -10,8 +10,7 @@ export type FavoriteDocument = Favorite & Document;
 
 @Schema()
 export class Favorite {
-    @Prop()
-    count :number;
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     user: User;
 
